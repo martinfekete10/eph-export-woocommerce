@@ -1,0 +1,17 @@
+<EPH verzia="3.0">
+    <InfoEPH>
+        <Uhrada></Uhrada>
+        <Odosielatel></Odosielatel>
+    </InfoEPH>å
+    <Zasielky>
+        <Zasielka>
+            <Adresat></Adresat>
+            <Spat></Spat>
+            <SVDSpat></SVDSpat>
+            <Info></Info>
+            <PouziteSluzby></PouziteSluzby>
+            <DalsieUdaje></DalsieUdaje>
+            <ColneVyhlasenie></ColneVyhlasenie>
+        </Zasielka>
+    </Zasielky>
+</EPH>
