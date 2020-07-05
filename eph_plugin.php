@@ -16,9 +16,10 @@ Text Domain: eph-plugin
 */
 
 include 'xml_generator.php';
+include 'settings.php';
 
 // File for storing exported data
-$file = "eph-export.txt";
+$file = "eph-export.xml";
 
 // Adding to admin order list bulk dropdown a custom action 'export_eph'
 add_filter('bulk_actions-edit-shop_order', 'eph_export_action', 20, 1);
@@ -41,17 +42,22 @@ function handle_export_eph_action($redirect_to, $action, $post_ids) {
     
     $processed_ids = array();
 
+    // Generate EPH header
+    generate_infoEPH(count($post_ids));
+
     // Iterate through all the orders selected
     foreach ($post_ids as $post_id) {
-        $order = wc_get_order( $post_id );
-        $order_data = $order->get_data();
+        $order = wc_get_order($post_id);
+        //$order_data = $order->get_data();
 
         // Write to file
-        create_xml($order_data, $xml_file);
+        generate_zasielka($order);
         
         $processed_ids[] = $post_id;
     }
 
+    // Save XML variable to $xml_file
+    save_xml($xml_file);
     fclose($xml_file);
 
     return $redirect_to = add_query_arg(array(

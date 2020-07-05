@@ -7,36 +7,31 @@
  */
 
 
-// TODO pocet zasielok
-// TODO odosielatel atributy
+// -----------------------------------------------
+  
+$xml;
+$zasielky;
+
+// -----------------------------------------------
 
 /**
- * Parses $order_data variable and saves its content to $xml_file
- * 
- * @param order_data variable containing order data
- * @param xml_file variable for storing xml attributes, later to be exported
+ * Vygeneruje prvu cast XML suboru
  */
-function create_xml($order_data, $xml_file) {
-    xml_begin($xml_file);
-}
+function generate_infoEPH($pocet_zasielok) {
 
+    global $xml, $zasielky;
 
-function xml_begin($xml_file) {
-
-    // ----------------------------------------
-    // DOM-generovany XML file
-    
+    // DOM-generovany XML subor    
     $xml = new DOMDocument('1.0','UTF-8');
     $xml->formatOutput = true;
 
-    // ----------------------------------------
     // <EPH verzia='3.0'>
-    
     $root = $xml->createElement('EPH');
     $xml->appendChild($root);
     $root->setAttribute('verzia', '3.0');
 
-    // ----------------------------------------
+
+    // ------------------------------------------
     // <InfoEPH>
 
     $infoEPH = $xml->createElement('InfoEPH');
@@ -47,9 +42,9 @@ function xml_begin($xml_file) {
     
     // TypEPH nastaveny na '1' == EPH
     $infoEPH->appendChild($xml->createElement('TypEPH', '1'));
-    $infoEPH->appendChild($xml->createElement('PocetZasielok', '1'));
+    $infoEPH->appendChild($xml->createElement('PocetZasielok', $pocet_zasielok));
 
-    // ----------------------------------------
+    // ------------------------------------------
     // <Uhrada>
     
     $uhrada = $xml->createElement('Uhrada');
@@ -61,7 +56,7 @@ function xml_begin($xml_file) {
     // SumaUhrady neznama, bude vypocitane pri podaji na poste, preto 0.00
     $uhrada->appendChild($xml->createElement('SumaUhrady', '0.00'));
 
-    // ----------------------------------------
+    // ------------------------------------------
     // <InfoEPH> podelementy
     
     // DruhPPP nastaveny na '5' == dobierkova suma bude poslana na zadany IBAN
@@ -70,26 +65,104 @@ function xml_begin($xml_file) {
     // DruhZasielky nastaveny na '1' == Doporuceny list
     $infoEPH->appendChild($xml->createElement('DruhZasielky', '1'));
     
-    // ----------------------------------------
+    // ------------------------------------------
     // <Odosielatel>
 
     $odosielatel = $xml->createElement('Odosielatel');
     $infoEPH->appendChild($odosielatel);
 
-    // ----------------------------------------
+    // ------------------------------------------
+    // Ziskanie hodnot zo Settings API
+    $options = get_option('eph_plugin_options');
+
+    $meno = $options['name'] . ' ' . $options['surname'];
+    $firma = $options['company'];
+    $ulica = $options['street'];
+    $mesto = $options['city'];
+    $psc = $options['postcode'];
+    $telefon = $options['mobile'];
+    $email = $options['email'];
+    $iban = $options['iban'];
+
+    // ------------------------------------------
     // <Odosielatel> podelementy
     
-    $odosielatel->appendChild($xml->createElement('Meno', 'Meno Priezvisko'));
-    $odosielatel->appendChild($xml->createElement('Organizacia', 'Firma'));
-    $odosielatel->appendChild($xml->createElement('Ulica', 'Ulica 42'));
-    $odosielatel->appendChild($xml->createElement('Mesto', 'Mesto'));
-    $odosielatel->appendChild($xml->createElement('PSC', '94901'));
-    $odosielatel->appendChild($xml->createElement('Telefon', '0944123123'));
-    $odosielatel->appendChild($xml->createElement('Email', 'vas@email.com'));
-    $odosielatel->appendChild($xml->createElement('CisloUctu', 'SK6311000000002931097161'));
+    $odosielatel->appendChild($xml->createElement('Meno', $meno));
+    $odosielatel->appendChild($xml->createElement('Organizacia', $firma));
+    $odosielatel->appendChild($xml->createElement('Ulica', $ulica));
+    $odosielatel->appendChild($xml->createElement('Mesto', $mesto));
+    $odosielatel->appendChild($xml->createElement('PSC', $psc));
+    $odosielatel->appendChild($xml->createElement('Telefon', $telefon));
+    $odosielatel->appendChild($xml->createElement('Email', $email));
+    $odosielatel->appendChild($xml->createElement('CisloUctu', $iban));
+
+    // ------------------------------------------
+    // <Zasielky>
+
+    $zasielky = $xml->createElement('Zasielky');
+    $root->appendChild($zasielky);
     
+}
+
+
+function generate_zasielka($order) {
+
+    global $xml, $zasielky;
+
+    // ------------------------------------------
+    // <Zasielka>
+
+    $zasielka = $xml->createElement('Zasielka');
+    $zasielky->appendChild($zasielka);
+
+    // ------------------------------------------
+    // <Adresat>
+
+    $adresat = $xml->createElement('Adresat');
+    $zasielka->appendChild($adresat);
+
+    // ------------------------------------------
+    // Ziskanie udajov z objednavky
+    $meno = $order->get_shipping_first_name() . ' ' . $order->get_shipping_last_name();
+    $ulica = $order->get_billing_address_1();
+    $mesto = $order->get_billing_city();
+    $psc = $order->get_billing_postcode();
+    $suma = $order->get_total();
+
+    // ------------------------------------------
+    // <Adresat> podelementy
+
+    $adresat->appendChild($xml->createElement('Meno', $meno));
+    $adresat->appendChild($xml->createElement('Ulica', $ulica));
+    $adresat->appendChild($xml->createElement('Mesto', $mesto));
+    $adresat->appendChild($xml->createElement('PSC', $psc));
+
+    // ------------------------------------------
+    // <Info>
+
+    $info = $xml->createElement('Info');
+    $zasielka->appendChild($info);
+
+    // ------------------------------------------
+    // <Info> podelementy
+
+    // Implicitne odosielane druhou triedou
+    $info->appendChild($xml->createElement('Trieda', '2'));
+
+}
+
+
+
+function save_xml($xml_file) {
+
+    global $xml;
+    
+    // ------------------------------------------
+    // Zapis do XML suboru
+
     fwrite($xml_file, $xml->saveXML());
 
 }
+
 
 ?>
