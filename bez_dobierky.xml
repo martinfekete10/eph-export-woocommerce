@@ -1,0 +1,38 @@
+<EPH verzia="3.0">
+    <InfoEPH>
+        <Mena>EUR</Mena>
+        <TypEPH>1</TypEPH>
+        <EPHID></EPHID>
+        <PocetZasielok>1</PocetZasielok>
+        <Uhrada>
+            <SposobUhrady>5</SposobUhrady>
+            <SumaUhrady>0.00</SumaUhrady>
+        </Uhrada>
+        <DruhPPP>5</DruhPPP>
+        <DruhZasielky>1</DruhZasielky>
+        <Odosielatel>
+            <Meno>Meno Priezvisko</Meno>
+            <Organizacia>Firma</Organizacia>
+            <Ulica>Ulica 42</Ulica>
+            <Mesto>Mesto</Mesto>
+            <PSC>94901</PSC>
+            <Telefon>0944123123</Telefon>
+            <Email>vas@email.com</Email>
+            <CisloUctu>SK6311000000002931097161</CisloUctu>
+        </Odosielatel>
+    </InfoEPH>
+    <Zasielky>
+        <Zasielka>
+            <Adresat>
+                <Meno>Meno Priezvisko</Meno>
+                <Ulica>Ulica 42</Ulica>
+                <Mesto>Mesto</Mesto>
+                <PSC>94901</PSC>
+            </Adresat>
+            <Info>
+                <Trieda>2</Trieda>
+            </Info>
+            <PouziteSluzby></PouziteSluzby>
+        </Zasielka>
+    </Zasielky>
+</EPH>

@@ -1,19 +1,21 @@
 <?php
 
 /**
- * @package eph-plugin
+ * @package eph_plugin
  */
 
 /*
 Plugin Name: EPH Export
-Plugin URI: http://FakeAssURI.com
-Description: Export customer details into Slovak postal service XML format.
+Plugin URI: https://github.com/martinfekete10/eph-export-woocommerce
+Description: Export customer details into Slovak Post XML format.
 Version: 1.0.0
 Author: Martin Fekete
 Author URI: https://github.com/martinfekete10
 License: GPLv2 or later
 Text Domain: eph-plugin
 */
+
+include 'xml_generator.php';
 
 // File for storing exported data
 $file = "eph-export.txt";
@@ -35,7 +37,7 @@ function handle_export_eph_action($redirect_to, $action, $post_ids) {
     global $directory, $file;
 
     // Open file for writing the output
-    $myfile = fopen($file, "w");
+    $xml_file = fopen($file, "w");
     
     $processed_ids = array();
 
@@ -45,12 +47,12 @@ function handle_export_eph_action($redirect_to, $action, $post_ids) {
         $order_data = $order->get_data();
 
         // Write to file
-        fwrite($myfile, $order->get_billing_city().'/n');
+        create_xml($order_data, $xml_file);
         
         $processed_ids[] = $post_id;
     }
 
-    fclose($myfile);
+    fclose($xml_file);
 
     return $redirect_to = add_query_arg(array(
                 'export_eph' => '1',
