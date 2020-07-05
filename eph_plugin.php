@@ -19,7 +19,7 @@ include 'xml_generator.php';
 include 'settings.php';
 
 // File for storing exported data
-$file = "eph-export.xml";
+$file = WP_PLUGIN_DIR . "/eph-plugin/exports/eph-export.xml";
 
 // Adding to admin order list bulk dropdown a custom action 'export_eph'
 add_filter('bulk_actions-edit-shop_order', 'eph_export_action', 20, 1);

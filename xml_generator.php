@@ -146,6 +146,12 @@ function generate_zasielka($order) {
     // ------------------------------------------
     // <Info> podelementy
 
+    // Ak bola platba dobierkou, prida sa dalsi element <CenaDobierky>
+    $platba = $order->get_payment_method();
+    if ($platba == "cod") {
+        $info->appendChild($xml->createElement('CenaDobierky', $suma));
+    }
+
     // Implicitne odosielane druhou triedou
     $info->appendChild($xml->createElement('Trieda', '2'));
 

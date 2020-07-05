@@ -8,7 +8,7 @@
 
 
 function eph_add_settings_page() {
-    add_options_page('Woocommerce do EPH', 'EPH export', 'manage_options', ‘eph-plugin’, 'eph_plugin_settings_page' );
+    add_options_page('Woocommerce do EPH', 'EPH export', 'manage_options', 'eph-plugin', 'eph_plugin_settings_page' );
 }
 add_action('admin_menu', 'eph_add_settings_page');
 
