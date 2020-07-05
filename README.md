@@ -1,2 +1,2 @@
-# EPH export for Woocommerce
-Wordpress plugin for exporting orders into XML file accepted by EPH (Slovak Post online service).
+# Woocommerce to EPH export
+Wordpress plugin for exporting Woocommerce orders into XML file accepted by EPH (Slovak Post online service). Slovak description below.
