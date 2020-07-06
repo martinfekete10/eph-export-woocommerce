@@ -1,30 +1,43 @@
 <?php
 
 /**
- * @package eph_plugin
- */
-
-/*
-Plugin Name: EPH Export
-Plugin URI: https://github.com/martinfekete10/eph-export-woocommerce
-Description: Export customer details into Slovak Post XML format.
-Version: 1.0.0
-Author: Martin Fekete
-Author URI: https://github.com/martinfekete10
-License: GPLv2 or later
-Text Domain: eph-plugin
+ * @package   Woo to EPH export
+ * @author    Martin Fekete
+ * @license   GPLv2 or later
+ * @link      https://github.com/martinfekete10/eph-export-woocommerce
+ * @copyright 2020 Martin Fekete
+ * 
+ * @wordpress-plugin
+ * Plugin Name: Woocommerce to EPH Export
+ * Plugin URI: https://github.com/martinfekete10/eph-export-woocommerce
+ * Description: Export customer details into Slovak Post online service (EPH) XML format.
+ * Version: 1.0.0
+ * Author: Martin Fekete
+ * Author URI: https://github.com/martinfekete10
+ * License: GPLv2 or later
+ * Text Domain: eph-export
+ * Domain Path: /languages/
 */
 
 include 'xml_generator.php';
-include 'settings.php';
+include 'settings_page.php';
 
+// --------------------------
+// Load language files
+function plugin_init() {
+    load_plugin_textdomain('eph-export', false, dirname(plugin_basename(__FILE__)).'/languages/');
+}
+add_action('plugins_loaded', 'plugin_init');
+
+
+// --------------------------
 // File for storing exported data
-$file = WP_PLUGIN_DIR . "/eph-plugin/exports/eph-export.xml";
+$file = WP_PLUGIN_DIR . "/eph-export/exports/eph-export.xml";
 
 // Adding to admin order list bulk dropdown a custom action 'export_eph'
 add_filter('bulk_actions-edit-shop_order', 'eph_export_action', 20, 1);
 function eph_export_action( $actions ) {
-    $actions['export_eph'] = __( 'Export to EPH', 'woocommerce' );
+    $actions['export_eph'] = __('Export to EPH', 'eph-export');
     return $actions;
 }
 
@@ -33,7 +46,7 @@ add_filter('handle_bulk_actions-edit-shop_order', 'handle_export_eph_action', 30
 function handle_export_eph_action($redirect_to, $action, $post_ids) {
     
     // Exit
-    if ( $action !== 'export_eph' ) return $redirect_to;
+    if ($action !== 'export_eph') return $redirect_to;
 
     global $directory, $file;
 
@@ -98,4 +111,35 @@ function download() {
     exit;
 }
 
-?>
+// --------------------------
+// Setting page in the plugin admin screen
+
+add_filter('plugin_action_links_'.plugin_basename(__FILE__), 'eph_add_plugin_page_settings_link');
+function eph_add_plugin_page_settings_link( $links ) {
+    $links[] = '<a href="' . admin_url( 'options-general.php?page=eph-export' ) . '">' . __('Settings', 'eph-export') . '</a>';
+    return $links;
+}
+
+// --------------------------
+// Activation notice
+
+register_activation_hook(__FILE__, 'eph_export_activation_hook');
+function eph_export_activation_hook() {
+    set_transient('eph-admin-notice-example', true, 5);
+}
+
+// Add admin notice
+add_action('admin_notices', 'eph_admin_notice');
+
+// Notice activation
+function eph_admin_notice(){
+
+    $html = "<p><strong>Configuration is needed</strong>. Go to <a href=" . admin_url('options-general.php?page=eph-export') . ">Settings -> EPH export</a> to confugire.</p>";
+
+    if(get_transient('eph-admin-notice-example')){
+        echo '<div class="updated notice is-dismissible">';
+        printf(__('<p><strong>Configuration is needed</strong>. Go to <a href="%s">Settings -> EPH export</a> to confugire.</p>', 'eph-export'), admin_url('options-general.php?page=eph-export'));
+        echo '</div>';
+        delete_transient('eph-admin-notice-example');
+    }
+}

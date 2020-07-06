@@ -1,3 +1,2 @@
 <?php
-    // Doesn't do anything.
-?>
+    // Silence is golden
