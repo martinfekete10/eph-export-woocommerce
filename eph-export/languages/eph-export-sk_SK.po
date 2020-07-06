@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Woocommerce to EPH Export\n"
-"POT-Creation-Date: 2020-07-06 12:41+0200\n"
-"PO-Revision-Date: 2020-07-06 12:43+0200\n"
+"POT-Creation-Date: 2020-07-06 16:22+0200\n"
+"PO-Revision-Date: 2020-07-06 16:22+0200\n"
 "Last-Translator: \n"
 "Language-Team: https://github.com/martinfekete10/eph-export-woocommerce\n"
 "Language: sk\n"
@@ -23,15 +23,14 @@ msgstr "Exportovať do EPH"
 msgid "Settings"
 msgstr "Nastavenia"
 
-#: eph_plugin.php:141
+#: eph_plugin.php:139
 #, php-format
 msgid ""
-"<p><strong>Configuration is needed</strong>. Go to <a href=\"%s\">Settings -"
-"> EPH export</a> to confugire.</p>"
+"<p><strong>Configuration is needed</strong>. Go to <a href='%s'>Settings -> "
+"EPH export</a> to configure.</p>"
 msgstr ""
-"<p><strong>Je potrebná konfigurácia</strong>. Choďte do <a "
-"href=“%s”>Nastavenia -> EPH export</a> pre nastavenie údajov odosielateľa.</"
-"p>"
+"<p><strong>Je potrebná konfigurácia</strong>. Choďte do <a href="
+"%s>Nastavenia -> EPH export</a> pre nastavenie údajov odosielateľa.</p>"
 
 #: settings_page.php:20
 msgid "Woocommerce to EPH"

@@ -134,11 +134,9 @@ add_action('admin_notices', 'eph_admin_notice');
 // Notice activation
 function eph_admin_notice(){
 
-    $html = "<p><strong>Configuration is needed</strong>. Go to <a href=" . admin_url('options-general.php?page=eph-export') . ">Settings -> EPH export</a> to confugire.</p>";
-
     if(get_transient('eph-admin-notice-example')){
         echo '<div class="updated notice is-dismissible">';
-        printf(__('<p><strong>Configuration is needed</strong>. Go to <a href="%s">Settings -> EPH export</a> to confugire.</p>', 'eph-export'), admin_url('options-general.php?page=eph-export'));
+        printf(__('<p><strong>Configuration is needed</strong>. Go to <a href=\'%s\'>Settings -> EPH export</a> to configure.</p>', 'eph-export'), admin_url('options-general.php?page=eph-export'));
         echo '</div>';
         delete_transient('eph-admin-notice-example');
     }
