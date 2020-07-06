@@ -1,6 +1,6 @@
 === Woocommerce to EPH Export ===
 Contributors: Martin Fekete
-Donate link: 
+Donate link: https://cutt.ly/eph-export
 Tags: WooCommerce, EPH, Slovenska Posta
 Requires at least: 4.5.0
 Tested up to: 4.8.0
