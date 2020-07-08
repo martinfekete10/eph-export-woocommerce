@@ -8,7 +8,7 @@
  * @copyright 2020 Martin Fekete
  * 
  * @wordpress-plugin
- * Plugin Name: Woocommerce to EPH Export
+ * Plugin Name: Slovak Post EPH Export
  * Plugin URI: https://github.com/martinfekete10/eph-export-woocommerce
  * Description: Export customer details into Slovak Post online service (EPH) XML format.
  * Version: 1.0.0

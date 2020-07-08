@@ -128,18 +128,24 @@ function generate_zasielka($order) {
     // Fetch important data from the order
 
     $meno = $order->get_shipping_first_name() . ' ' . $order->get_shipping_last_name();
-    $ulica = $order->get_billing_address_1();
+    $ulica1 = $order->get_billing_address_1();
+    $ulica2 = $order->get_billing_address_2();
     $mesto = $order->get_billing_city();
     $psc = $order->get_billing_postcode();
     $suma = $order->get_total();
     $telefon = $order->get_billing_phone();
     $email = $order->get_billing_email();
 
+    // Check if residence number was filled in adress block 1 or 2, if in 2, concat it to the adress
+    if ((strpos($ulica1, $ulica2) === false) && ($ulica2 != "")) {
+        $ulica1 = $ulica1 . " " . $ulica2;
+    }
+
     // ------------------------------------------
     // <Adresat> subelements
 
     $adresat->appendChild($xml->createElement('Meno', $meno));
-    $adresat->appendChild($xml->createElement('Ulica', $ulica));
+    $adresat->appendChild($xml->createElement('Ulica', $ulica1));
     $adresat->appendChild($xml->createElement('Mesto', $mesto));
     $adresat->appendChild($xml->createElement('PSC', $psc));
     $adresat->appendChild($xml->createElement('Telefon', $telefon));
@@ -162,7 +168,6 @@ function generate_zasielka($order) {
 
     // All packages are implicitly sent via the 2nd class
     $info->appendChild($xml->createElement('Trieda', '2'));
-
 }
 
 

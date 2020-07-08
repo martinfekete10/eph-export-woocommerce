@@ -1,18 +1,20 @@
-=== Woocommerce to EPH Export ===
-Contributors: Martin Fekete
+=== Slovak Post EPH Export ===
+Contributors: (martinfekete)
 Donate link: https://cutt.ly/eph-export
 Tags: WooCommerce, EPH, Slovenska Posta
 Requires at least: 4.5.0
-Tested up to: 4.8.0
+Tested up to: 5.4.2
 Stable tag: 1.0.0
+Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-=== Description ===
-Wordpress plugin for exporting orders into XML file accepted by EPH
-(Slovak Post online system).
+Wordpress plugin for exporting Woocommerce orders accepted by Slovak Post online service.
 
-=== Installation ===
+== Description ==
+Wordpress plugin for exporting orders into XML file accepted by EPH (Slovak Post online system).
+
+== Installation ==
 Can by done in 2 ways:
 
 a) Uploading in WordPress Dashboard
@@ -30,7 +32,23 @@ b) Using FTP
 
 == Frequently Asked Questions ==
 
+= How do I use the plugin? =
+
+You simply select the orders you want to export and then choose "Export to EPH" in the bulk selection menu.
+
+= How do I add my adress to the XML? =
+
+Go to Settings -> EPH export and fill out all your information.
+
 == Screenshots ==
+
+1. Settings where you must fill out all your info
+2. Usage example
+
+== Upgrade Notice == 
+
+= 1.0.0 =
+Startup version
 
 == Changelog ==
 
