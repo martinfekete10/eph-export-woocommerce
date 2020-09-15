@@ -21,7 +21,7 @@ $zasielky;
 // -----------------------------------------------
 
 // The header part of the XML file (sender info)
-function generate_infoEPH($pocet_zasielok) {
+function spephe_generate_info_eph($pocet_zasielok) {
 
     global $xml, $zasielky;
 
@@ -76,7 +76,7 @@ function generate_infoEPH($pocet_zasielok) {
 
     // ------------------------------------------
     // Load the data from the Settings API
-    $options = get_option('eph_plugin_options');
+    $options = get_option('spephe_plugin_options');
 
     $meno = $options['name'] . ' ' . $options['surname'];
     $firma = $options['company'];
@@ -108,7 +108,7 @@ function generate_infoEPH($pocet_zasielok) {
 }
 
 // Generate new <Zasielka> element for every order
-function generate_zasielka($order) {
+function spephe_generate_zasielka($order) {
 
     global $xml, $zasielky;
 
@@ -163,16 +163,36 @@ function generate_zasielka($order) {
     // If cash on delivery was selected, new element <CenaDobierky> is added
     $platba = $order->get_payment_method();
     if ($platba == "cod") {
+        // Cash on delivery
         $info->appendChild($xml->createElement('CenaDobierky', $suma));
+        // Variable symbol
+        $info->appendChild($xml->createElement('SymbolPrevodu', $order->get_id()));
     }
-
+    
     // All packages are implicitly sent via the 2nd class
     $info->appendChild($xml->createElement('Trieda', '2'));
+    
+    // Get total weight of order
+    $total_weight = 0;
+    foreach ($order->get_items() as $item_id => $item) {
+        $product = $item->get_product();
+        $quantity = $item->get_quantity();
+        
+        if ($product->has_weight()) {
+            $total_weight = $product->get_weight() * $quantity;
+        }
+    }
+
+    // Add weight element to the XML
+    if ($total_weight != 0) {
+        $total_weight = number_format((float)$total_weight, 2, '.', '');
+        $info->appendChild($xml->createElement('Hmotnost', $total_weight));
+    }
 }
 
 
 // Save XML variable to the file in the argument
-function save_xml($xml_file) {
+function spephe_save_xml($xml_file) {
 
     global $xml;
     

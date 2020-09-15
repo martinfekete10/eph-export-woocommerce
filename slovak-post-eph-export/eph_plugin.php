@@ -15,35 +15,40 @@
  * Author: Martin Fekete
  * Author URI: https://github.com/martinfekete10
  * License: GPLv2 or later
- * Text Domain: eph-export
+ * Text Domain: slovak-post-eph-export
  * Domain Path: /languages/
-*/
+ */
 
 include 'xml_generator.php';
 include 'settings_page.php';
 
+// -------------------------
+// spephe_ == (s)Slovak (p)Post (eph)EPH (e)Export
+// Prefix used in order to prevent conflicts with other functions
+
+
 // --------------------------
 // Load language files
-function plugin_init() {
-    load_plugin_textdomain('eph-export', false, dirname(plugin_basename(__FILE__)).'/languages/');
+function spephe_plugin_init() {
+    load_plugin_textdomain('slovak-post-eph-export', false, dirname(plugin_basename(__FILE__)).'/languages/');
 }
-add_action('plugins_loaded', 'plugin_init');
+add_action('plugins_loaded', 'spephe_plugin_init');
 
 
 // --------------------------
 // File for storing exported data
-$file = WP_PLUGIN_DIR . "/eph-export/exports/eph-export.xml";
+$file = WP_PLUGIN_DIR . "/slovak-post-eph-export/exports/eph-export.xml";
 
 // Adding to admin order list bulk dropdown a custom action 'export_eph'
-add_filter('bulk_actions-edit-shop_order', 'eph_export_action', 20, 1);
-function eph_export_action( $actions ) {
-    $actions['export_eph'] = __('Export to EPH', 'eph-export');
+add_filter('bulk_actions-edit-shop_order', 'spephe_export_action', 20, 1);
+function spephe_export_action( $actions ) {
+    $actions['export_eph'] = __('Export to EPH', 'slovak-post-eph-export');
     return $actions;
 }
 
 // Make the action from selected orders
-add_filter('handle_bulk_actions-edit-shop_order', 'handle_export_eph_action', 30, 3);
-function handle_export_eph_action($redirect_to, $action, $post_ids) {
+add_filter('handle_bulk_actions-edit-shop_order', 'spephe_handle_export_action', 30, 3);
+function spephe_handle_export_action($redirect_to, $action, $post_ids) {
     
     // Exit
     if ($action !== 'export_eph') return $redirect_to;
@@ -56,7 +61,7 @@ function handle_export_eph_action($redirect_to, $action, $post_ids) {
     $processed_ids = array();
 
     // Generate EPH header
-    generate_infoEPH(count($post_ids));
+    spephe_generate_info_eph(count($post_ids));
 
     // Iterate through all the orders selected
     foreach ($post_ids as $post_id) {
@@ -64,13 +69,13 @@ function handle_export_eph_action($redirect_to, $action, $post_ids) {
         //$order_data = $order->get_data();
 
         // Write to file
-        generate_zasielka($order);
+        spephe_generate_zasielka($order);
         
         $processed_ids[] = $post_id;
     }
 
     // Save XML variable to $xml_file
-    save_xml($xml_file);
+    spephe_save_xml($xml_file);
     fclose($xml_file);
 
     return $redirect_to = add_query_arg(array(
@@ -81,18 +86,18 @@ function handle_export_eph_action($redirect_to, $action, $post_ids) {
 }
 
 // The results notice from bulk action on orders
-add_action('admin_notices', 'eph_export_admin_notice');
-function eph_export_admin_notice() {
+add_action('admin_notices', 'spephe_export_admin_notice');
+function spephe_export_admin_notice() {
     
     // Exit
     if (empty( $_REQUEST['export_eph'])) return;
 
     // Download
-    download();
+    spephe_download_xml();
 }
 
 // Download the file
-function download() {
+function spephe_download_xml() {
     
     global $file;
 
@@ -114,29 +119,29 @@ function download() {
 // --------------------------
 // Setting page in the plugin admin screen
 
-add_filter('plugin_action_links_'.plugin_basename(__FILE__), 'eph_add_plugin_page_settings_link');
-function eph_add_plugin_page_settings_link( $links ) {
-    $links[] = '<a href="' . admin_url( 'options-general.php?page=eph-export' ) . '">' . __('Settings', 'eph-export') . '</a>';
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'spephe_add_plugin_page_settings_link');
+function spephe_add_plugin_page_settings_link( $links ) {
+    $links[] = '<a href="' . admin_url('options-general.php?page=slovak-post-eph-export') . '">' . __('Settings', 'slovak-post-eph-export') . '</a>';
     return $links;
 }
 
 // --------------------------
 // Activation notice
 
-register_activation_hook(__FILE__, 'eph_export_activation_hook');
-function eph_export_activation_hook() {
+register_activation_hook(__FILE__, 'spephe_export_activation_hook');
+function spephe_export_activation_hook() {
     set_transient('eph-admin-notice-example', true, 5);
 }
 
 // Add admin notice
-add_action('admin_notices', 'eph_admin_notice');
+add_action('admin_notices', 'spephe_admin_notice');
 
 // Notice activation
-function eph_admin_notice(){
+function spephe_admin_notice(){
 
     if(get_transient('eph-admin-notice-example')){
         echo '<div class="updated notice is-dismissible">';
-        printf(__('<p><strong>Configuration is needed</strong>. Go to <a href=\'%s\'>Settings -> EPH export</a> to configure.</p>', 'eph-export'), admin_url('options-general.php?page=eph-export'));
+        printf(__('<p><strong>Configuration is needed</strong>. Go to <a href=\'%s\'>Settings -> EPH export</a> to configure.</p>', 'slovak-post-eph-export'), admin_url('options-general.php?page=slovak-post-eph-export'));
         echo '</div>';
         delete_transient('eph-admin-notice-example');
     }

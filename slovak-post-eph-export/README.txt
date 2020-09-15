@@ -45,12 +45,19 @@ Go to Settings -> EPH export and fill out all your information.
 1. Settings where you must fill out all your info
 2. Usage example
 
-== Upgrade Notice == 
+== Changelog ==
+
+= 1.1.0 =
+* Added weight of the order to the XML file which enables online payment in the EPH system
+* Woocommerce order ID is now used a variable symbol in the EPH COD payment
 
 = 1.0.0 =
-Startup version
+* Startup version
 
-== Changelog ==
+== Upgrade Notice == 
+
+= 1.1.0 =
+Added weight of the order to the XML file which enables online payment in the EPH system. Woocommerce order ID is now used a variable symbol in the EPH COD payment.
 
 = 1.0.0 =
 Startup version

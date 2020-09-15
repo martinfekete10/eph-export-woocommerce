@@ -1,0 +1,89 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Woocommerce to EPH Export\n"
+"POT-Creation-Date: 2020-07-06 16:22+0200\n"
+"PO-Revision-Date: 2020-07-06 16:22+0200\n"
+"Last-Translator: \n"
+"Language-Team: https://github.com/martinfekete10/eph-export-woocommerce\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: eph_plugin.php:40
+msgid "Export to EPH"
+msgstr "Exportovať do EPH"
+
+#: eph_plugin.php:119
+msgid "Settings"
+msgstr "Nastavenia"
+
+#: eph_plugin.php:139
+#, php-format
+msgid ""
+"<p><strong>Configuration is needed</strong>. Go to <a href='%s'>Settings -> "
+"EPH export</a> to configure.</p>"
+msgstr ""
+"<p><strong>Je potrebná konfigurácia</strong>. Choďte do <a href="
+"%s>Nastavenia -> EPH export</a> pre nastavenie údajov odosielateľa.</p>"
+
+#: settings_page.php:20
+msgid "Woocommerce to EPH"
+msgstr "Woocommerce do EPH"
+
+#: settings_page.php:26
+msgid "<h1>Woocommerce to EPH Export</h1>"
+msgstr "<h1>Woocommerce do EPH Export</h1>"
+
+#: settings_page.php:32
+msgid "Save"
+msgstr "Uložiť"
+
+#: settings_page.php:40
+msgid "Consignor information"
+msgstr "Informácie o odosielateľovi"
+
+#: settings_page.php:42
+msgid "Name"
+msgstr "Meno"
+
+#: settings_page.php:43
+msgid "Surname"
+msgstr "Priezvisko"
+
+#: settings_page.php:44
+msgid "Company"
+msgstr "Spoločnosť"
+
+#: settings_page.php:45
+msgid "Street and conscription number"
+msgstr "Ulica a popisné číslo"
+
+#: settings_page.php:46
+msgid "City"
+msgstr "Mesto"
+
+#: settings_page.php:47
+msgid "Postcode"
+msgstr "PSČ"
+
+#: settings_page.php:48
+msgid "Mobile"
+msgstr "Telefón"
+
+#: settings_page.php:49
+msgid "Email"
+msgstr "Email"
+
+#: settings_page.php:50
+msgid "IBAN"
+msgstr "IBAN"
+
+#: settings_page.php:59
+msgid "<p>Fill out all the fields important for the EPH</p>"
+msgstr "<p>Vyplňte všetky informácie o odosielateľovi potrebné pre EPH</p>"

@@ -29,7 +29,7 @@ Woocommerce to EPH Export je plugin určený na export Woocommerce objednávok d
 
 ![woocommerce export eph konfigurovat](https://i.imgur.com/PeXAG16.png "Konfigurovať")
 
-5. Po aktivovaní sa v hornej časti obrazovaky objaví správa o potrebnej konfigurácii, ktorá vás odkáže na **nastavenia pluginu**, kde je potrebné vyplniť **údaje odosielateľa**, ktoré máte uvedené v systéme EPH
+5. Po aktivovaní sa v hornej časti obrazovky objaví správa o potrebnej konfigurácii, ktorá vás odkáže na **nastavenia pluginu**, kde je potrebné vyplniť **údaje odosielateľa**, ktoré máte uvedené v systéme EPH
 
 ![woocommerce export eph nastavenia](https://i.imgur.com/AI6coUz.png "Nastaviť")
 
