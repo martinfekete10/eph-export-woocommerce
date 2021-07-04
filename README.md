@@ -3,10 +3,10 @@
 
 ---
 
-Woocommerce to EPH Export je plugin určený na export Woocommerce objednávok do XML súboru, ktorý je možné importovať do webového systému EPH od Slovenskej Pošty (eph.posta.sk).
+Woocommerce to EPH Export je plugin určený na export Woocommerce objednávok do XML súboru, ktorý je možné importovať do webového systému EPH od Slovenskej Pošty [eph.posta.sk](https://eposta.posta.sk/epodaci-harok/).
 
 ### **Funkcie**
-- objednávky sú exportované ako **doporučený list**
+- objednávky sú exportované ako **Doporučený list**, **Balík** alebo **Expres kuriér**
 - podpora **hromadného exportu** objednávok
 - podpora zásielok s platbou cez dobierku aj bez dobierky
 - okrem adresy príjemcu je exportovaný aj jeho email a telefón (ak bol pri objednávke zadaný)

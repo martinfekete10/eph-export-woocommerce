@@ -5,7 +5,7 @@
  * @author    Martin Fekete
  * @license   GPLv2 or later
  * @link      https://github.com/martinfekete10/eph-export-woocommerce
- * @copyright 2020 Martin Fekete
+ * @copyright 2021 Martin Fekete
  *
  * ----------------------------------------------
  * Parses the order and saves important attributes to XML file
@@ -21,8 +21,7 @@ $zasielky;
 // -----------------------------------------------
 
 // The header part of the XML file (sender info)
-function spephe_generate_info_eph($pocet_zasielok) {
-
+function spephe_generate_info_eph($pocet_zasielok, $service) {
     global $xml, $zasielky;
 
     // DOM-generated XML file
@@ -42,8 +41,7 @@ function spephe_generate_info_eph($pocet_zasielok) {
     
     // <InfoEPH> subelements
     $infoEPH->appendChild($xml->createElement('Mena', 'EUR'));
-    
-    // TypEPH set to '1' == EPH
+
     $infoEPH->appendChild($xml->createElement('TypEPH', '1'));
     $infoEPH->appendChild($xml->createElement('PocetZasielok', $pocet_zasielok));
 
@@ -65,8 +63,10 @@ function spephe_generate_info_eph($pocet_zasielok) {
     // DruhPPP set to '5' == cash on delivery amount will be sent to provided IBAN
     $infoEPH->appendChild($xml->createElement('DruhPPP', '5'));
     
-    // DruhZasielky set to '1' == registered letter (doporuceny list)
-    $infoEPH->appendChild($xml->createElement('DruhZasielky', '1'));
+    // DruhZasielky set based on service selected from dropdown menu
+    // getPostalServiceID returns ID of the service based on documentation
+    $sluzba = getPostalServiceID($service);
+    $infoEPH->appendChild($xml->createElement('DruhZasielky', $sluzba));
     
     // ------------------------------------------
     // <Odosielatel>
@@ -128,13 +128,14 @@ function spephe_generate_zasielka($order) {
     // Fetch important data from the order
 
     $meno = $order->get_shipping_first_name() . ' ' . $order->get_shipping_last_name();
-    $ulica1 = $order->get_billing_address_1();
-    $ulica2 = $order->get_billing_address_2();
-    $mesto = $order->get_billing_city();
-    $psc = $order->get_billing_postcode();
-    $suma = $order->get_total();
+    $ulica1 = $order->get_shipping_address_1();
+    $ulica2 = $order->get_shipping_address_2();
+    $mesto = $order->get_shipping_city();
+    $psc = $order->get_shipping_postcode();
+    $krajina = $order->get_shipping_country();
     $telefon = $order->get_billing_phone();
     $email = $order->get_billing_email();
+    $suma = $order->get_total();
 
     // Check if residence number was filled in adress block 1 or 2, if in 2, concat it to the adress
     if ((strpos($ulica1, $ulica2) === false) && ($ulica2 != "")) {
@@ -147,6 +148,7 @@ function spephe_generate_zasielka($order) {
     $adresat->appendChild($xml->createElement('Meno', $meno));
     $adresat->appendChild($xml->createElement('Ulica', $ulica1));
     $adresat->appendChild($xml->createElement('Mesto', $mesto));
+    $adresat->appendChild($xml->createElement('Krajina', $krajina));
     $adresat->appendChild($xml->createElement('PSC', $psc));
     $adresat->appendChild($xml->createElement('Telefon', $telefon));
     $adresat->appendChild($xml->createElement('Email', $email));
@@ -156,6 +158,10 @@ function spephe_generate_zasielka($order) {
 
     $info = $xml->createElement('Info');
     $zasielka->appendChild($info);
+
+    // Get IBAN
+    $options = get_option('spephe_plugin_options');
+    $iban = $options['iban'];
 
     // ------------------------------------------
     // <Info> subelements
@@ -167,6 +173,8 @@ function spephe_generate_zasielka($order) {
         $info->appendChild($xml->createElement('CenaDobierky', $suma));
         // Variable symbol
         $info->appendChild($xml->createElement('SymbolPrevodu', $order->get_id()));
+        // IBAN
+        $info->appendChild($xml->createElement('CisloUctu', $iban));
     }
     
     // All packages are implicitly sent via the 2nd class
@@ -188,17 +196,31 @@ function spephe_generate_zasielka($order) {
         $total_weight = number_format((float)$total_weight, 2, '.', '');
         $info->appendChild($xml->createElement('Hmotnost', $total_weight));
     }
+
+    // <Poznamka> - note element contains order ID
+    $info->appendChild($xml->createElement('Poznamka', 'Objednávka ' . $order->get_id()));
 }
 
 
 // Save XML variable to the file in the argument
 function spephe_save_xml($xml_file) {
-
     global $xml;
-    
-    // ------------------------------------------
-    // Write to XML file
-
     fwrite($xml_file, $xml->saveXML());
+}
 
+// Returns postal service ID based on selection from dropdown menu
+function getPostalServiceID($service) {
+    switch($service) {
+        // Registered letter
+        case 'registered_letter':
+            return '1';
+        // Package
+        case 'package':
+            return '4';
+        // Express courier
+        case 'express_courier':
+            return '8';
+        default:
+            return '1';
+    }
 }

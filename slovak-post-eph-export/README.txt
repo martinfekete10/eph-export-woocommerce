@@ -3,8 +3,8 @@ Contributors: (martinfekete)
 Donate link: https://cutt.ly/eph-export
 Tags: WooCommerce, EPH, Slovenska Posta
 Requires at least: 4.5.0
-Tested up to: 5.4.2
-Stable tag: 1.0.0
+Tested up to: 5.7.2
+Stable tag: 1.2.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -47,6 +47,10 @@ Go to Settings -> EPH export and fill out all your information.
 
 == Changelog ==
 
+= 1.2.0 =
+* Fixed bug with different shipping address
+* Added Express courier and Package options
+
 = 1.1.0 =
 * Added weight of the order to the XML file which enables online payment in the EPH system
 * Woocommerce order ID is now used a variable symbol in the EPH COD payment
@@ -55,6 +59,10 @@ Go to Settings -> EPH export and fill out all your information.
 * Startup version
 
 == Upgrade Notice == 
+
+= 1.2.0 =
+Fixed bug with different shipping address.
+Added Express courier and Package options.
 
 = 1.1.0 =
 Added weight of the order to the XML file which enables online payment in the EPH system. Woocommerce order ID is now used a variable symbol in the EPH COD payment.

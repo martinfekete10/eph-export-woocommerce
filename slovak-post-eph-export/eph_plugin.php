@@ -5,13 +5,13 @@
  * @author    Martin Fekete
  * @license   GPLv2 or later
  * @link      https://github.com/martinfekete10/eph-export-woocommerce
- * @copyright 2020 Martin Fekete
+ * @copyright 2021 Martin Fekete
  * 
  * @wordpress-plugin
  * Plugin Name: Slovak Post EPH Export
  * Plugin URI: https://github.com/martinfekete10/eph-export-woocommerce
  * Description: Export customer details into Slovak Post online service (EPH) XML format.
- * Version: 1.0.0
+ * Version: 1.2.0
  * Author: Martin Fekete
  * Author URI: https://github.com/martinfekete10
  * License: GPLv2 or later
@@ -41,36 +41,39 @@ $file = WP_PLUGIN_DIR . "/slovak-post-eph-export/exports/eph-export.xml";
 
 // Adding to admin order list bulk dropdown a custom action 'export_eph'
 add_filter('bulk_actions-edit-shop_order', 'spephe_export_action', 20, 1);
-function spephe_export_action( $actions ) {
-    $actions['export_eph'] = __('Export to EPH', 'slovak-post-eph-export');
+function spephe_export_action($actions) {
+    $actions['registered_letter'] = __('EPH export - Registered letter', 'slovak-post-eph-export');
+    $actions['package'] = __('EPH export - Package', 'slovak-post-eph-export');
+    $actions['express_courier'] = __('EPH export - Express courier', 'slovak-post-eph-export');
     return $actions;
 }
 
-// Make the action from selected orders
+// Generate XML based on seleciton from dropdown
+// Either Express courier, Registered letter or Package services are supported
 add_filter('handle_bulk_actions-edit-shop_order', 'spephe_handle_export_action', 30, 3);
-function spephe_handle_export_action($redirect_to, $action, $post_ids) {
-    
-    // Exit
-    if ($action !== 'export_eph') return $redirect_to;
-
+function spephe_handle_export_action($redirect_to, $service, $post_ids) {
     global $directory, $file;
+    
+    // If not desired service
+    if ($service !== 'registered_letter'
+        && $service !== 'package'
+        && $service !== 'express_courier') {
+        return $redirect_to;
+    }
 
     // Open file for writing the output
     $xml_file = fopen($file, "w");
-    
     $processed_ids = array();
 
     // Generate EPH header
-    spephe_generate_info_eph(count($post_ids));
+    spephe_generate_info_eph(count($post_ids), $service);
 
     // Iterate through all the orders selected
     foreach ($post_ids as $post_id) {
         $order = wc_get_order($post_id);
-        //$order_data = $order->get_data();
 
         // Write to file
         spephe_generate_zasielka($order);
-        
         $processed_ids[] = $post_id;
     }
 
@@ -88,17 +91,12 @@ function spephe_handle_export_action($redirect_to, $action, $post_ids) {
 // The results notice from bulk action on orders
 add_action('admin_notices', 'spephe_export_admin_notice');
 function spephe_export_admin_notice() {
-    
-    // Exit
     if (empty( $_REQUEST['export_eph'])) return;
-
-    // Download
     spephe_download_xml();
 }
 
 // Download the file
 function spephe_download_xml() {
-    
     global $file;
 
     header('Content-Description: File Transfer');
